@@ -1,0 +1,6 @@
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '10 USDT', '10', '1', '120', '1', '10', '5', 'YES');
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '100 USDT', '100', '1.1', '120', '2', '10', '5', 'YES');
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '500 USDT', '500', '1.2', '120', '3', '10', '5', 'YES');
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '1000 USDT', '1000', '1.3', '120', '4', '10', '5', 'YES');
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '5000 USDT', '5000', '1.4', '120', '5', '10', '5', 'YES');
+INSERT INTO `packages` (`p_id`, `p_name`, `p_amount`, `p_percent`, `p_period`, `p_order`, `p_ref_comm_pc`, `p_binary_comm_pc`, `is_enabled`) VALUES (NULL, '10000 USDT', '10000', '1.5', '120', '6', '10', '5', 'YES');

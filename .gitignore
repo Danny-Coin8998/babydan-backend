@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+
+# Node modules
+node_modules/
+
+# Package lock file
+package-lock.json
+
+# Package lock file with @ prefix
+.package-lock.json
+
+# Backup files
+authController.js.backup
+authController.js.backup2
+
+# Package lock files in node_modules
+node_modules/.package-lock.json
+
+# General backup files
+*.backup
+*.backup*
+
+# Log files
+logs/
+*.log
