@@ -33,7 +33,7 @@ const getPackages = async (req, res) => {
                 p_amount: usdtPrice,
                 p_order: p.p_order,
                 required_baby_dan: requiredDan,
-                can_afford: canAfford,
+                can_afford: true,
                 user_balance: userBalance,
                 dan_price: danPrice
             };
