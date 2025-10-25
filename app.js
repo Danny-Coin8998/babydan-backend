@@ -22,7 +22,7 @@ const transferRoutes = require('./routes/transfer');
 const { testConnection } = require('./config/database');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 
 const isDev = process.env.MODE !== 'production';
 const parseList = v => (v || '')
