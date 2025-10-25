@@ -75,35 +75,35 @@ app.get('/v2', (req, res) => {
         version: '1.0.0',
         endpoints: {
             auth: {
-                login: 'POST /api/auth/login',
-                logout: 'POST /api/auth/logout',
-                test: 'GET /api/auth/test/:userid'
+                login: 'POST /v2/api/auth/login',
+                logout: 'POST /v2/api/auth/logout',
+                test: 'GET /v2/api/auth/test/:userid'
             },
-            dashboard: 'GET /api/dashboard/',
-            investment: 'GET /api/my-investment/',
-            directReferral: 'GET /api/my-direct-referral/direct',
-            team: 'GET /api/my-team/team',
-            history: 'GET /api/history/',
-            referralLink: 'GET /api/ref-link/link'
+            dashboard: 'GET /v2/api/dashboard/',
+            investment: 'GET /v2/api/my-investment/',
+            directReferral: 'GET /v2/api/my-direct-referral/direct',
+            team: 'GET /v2/api/my-team/team',
+            history: 'GET /v2/api/history/',
+            referralLink: 'GET /v2/api/ref-link/link'
         }
     });
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/my-investment', investmentRoutes);
-app.use('/api/my-direct-ref', referralRoutes);
-app.use('/api/my-team', teamRoutes);
-app.use('/api/history', historyRoutes);
-app.use('/api/ref-link', refLinkRoutes);
-app.use('/api/get-balance', walletRoutes);
-app.use('/api/get-packages', packagesRoutes);
-app.use('/api/deposit', depositRoutes);
-app.use('/api/buy-package', buyPackageRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/withdraw', withdrawRoutes);
-app.use('/api/transfer', transferRoutes);
+app.use('/v2/api/auth', authRoutes);
+app.use('/v2/api/dashboard', dashboardRoutes);
+app.use('/v2/api/my-investment', investmentRoutes);
+app.use('/v2/api/my-direct-ref', referralRoutes);
+app.use('/v2/api/my-team', teamRoutes);
+app.use('/v2/api/history', historyRoutes);
+app.use('/v2/api/ref-link', refLinkRoutes);
+app.use('/v2/api/get-balance', walletRoutes);
+app.use('/v2/api/get-packages', packagesRoutes);
+app.use('/v2/api/deposit', depositRoutes);
+app.use('/v2/api/buy-package', buyPackageRoutes);
+app.use('/v2/api/profile', profileRoutes);
+app.use('/v2/api/withdraw', withdrawRoutes);
+app.use('/v2/api/transfer', transferRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -113,7 +113,7 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use('*', (req, res) => {
-    res.status(404).json({ success: false, error: 'API endpoint not found' });
+    res.status(404).json({ success: false, error: 'API endpoint not found'+res });
 });
 
 module.exports = app;
