@@ -9,7 +9,7 @@ const getTeamData = async (req, res) => {
         // Optional depth parameter for recursive tree (default 2, max 6)
         const depthParam = parseInt(req.query.depth, 10);
         const maxDepth = 10;
-        const depth = Number.isFinite(depthParam) ? Math.max(0, Math.min(depthParam, maxDepth)) : 2;
+        const depth = Number.isFinite(depthParam) ? Math.max(0, Math.min(depthParam, maxDepth)) : 10;
         
         // Get user info
         const connection = await getConnection();
