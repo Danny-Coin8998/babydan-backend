@@ -32,7 +32,7 @@ const parseList = v => (v || '')
   .map(s => s.replace(/\/+$/, '')); // strip trailing slash
 
 const devOrigins = parseList(process.env.DEV_BASE_URLS); // e.g. http://localhost:3000,http://127.0.0.1:3000
-const prodOrigins = parseList(process.env.BASE_URL);      // e.g. https://danstaking.com,https://dan-binary.vercel.app
+const prodOrigins = parseList(process.env.BASE_URL_LIST);      // e.g. https://danstaking.com,https://dan-binary.vercel.app
 
 const corsOptions = {
   origin(origin, cb) {

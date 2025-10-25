@@ -15,7 +15,7 @@ const getReferralLinks = async (req, res) => {
         }
         
         const ref_code = results[0].ref_code;
-        const baseUrl = process.env.BASE_URL || 'https://dan-staking.com';
+        const baseUrl = process.env.BASE_URL || 'https://babydan.io';
         
         const referralLinks = {
             left_side: `${baseUrl}/register?ref=${ref_code}&side=left`,
