@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 testConnection();
 
 // Routes
-app.get('/', (req, res) => {
+app.get('/v2', (req, res) => {
     res.json({ 
         message: 'Baby Dan API Server is running!',
         version: '1.0.0',
