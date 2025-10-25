@@ -44,6 +44,13 @@ const getDashboardData = async (req, res) => {
         const [investmentResult] = await connection.execute(investmentQuery, [userid]);
         const totalInv = Number(investmentResult[0].total_inv || 0);
 
+        const totalActiveUsdtQuery = `SELECT SUM(P.p_amount) as total_inv 
+                                FROM member_invest A 
+                                INNER JOIN packages P ON A.p_id = P.p_id 
+                                WHERE A.userid = ? AND (A.status = 'ACTIVE'`;
+        const [totalActiveUsdtResult] = await connection.execute(totalActiveUsdtQuery, [userid]);
+        const totalActiveUsdt = Number(totalActiveUsdtResult[0].total_inv || 0);
+
         // Get all other dashboard data
         const [
             accountBalance,
@@ -80,6 +87,7 @@ const getDashboardData = async (req, res) => {
             total_deposit: Number(totalDeposit),
             total_earned: Number(newTotalEarned),
             total_withdraw: Number(totalWithdraw),
+            total_active_usdt: Number(totalActiveUsdt),
             total_investment_active: Number(totalInvActive),
             total_investment: Number(totalInv),
             total_commission: Number(totalCommission),
