@@ -47,7 +47,7 @@ const getDashboardData = async (req, res) => {
         const totalActiveUsdtQuery = `SELECT SUM(P.p_amount) as total_inv 
                                 FROM member_invest A 
                                 INNER JOIN packages P ON A.p_id = P.p_id 
-                                WHERE A.userid = ? AND (A.status = 'ACTIVE'`;
+                                WHERE A.userid = ? AND (A.status = 'ACTIVE')`;
         const [totalActiveUsdtResult] = await connection.execute(totalActiveUsdtQuery, [userid]);
         const totalActiveUsdt = Number(totalActiveUsdtResult[0].total_inv || 0);
 
