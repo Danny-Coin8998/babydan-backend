@@ -3,9 +3,9 @@ const mysql = require('mysql2');
 // Database connection configuration
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'u532561418_danuser',
-    password: process.env.DB_PASSWORD || '424088Iz@',
-    database: process.env.DB_NAME || 'u532561418_dandb',
+    user: process.env.DB_USER || 'u532561418_babydan_user',
+    password: process.env.DB_PASSWORD || 'baby418Dan',
+    database: process.env.DB_NAME || 'u532561418_babydandb',
     charset: 'utf8mb4',
     waitForConnections: true,
     connectionLimit: 10,
