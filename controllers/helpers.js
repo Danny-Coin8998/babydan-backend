@@ -279,6 +279,61 @@ const getEarningsCapAdjustments = async (userid) => {
     }
 };
 
+// MLM Binary Tree Positioning Functions (converted from PHP)
+// Find the last (deepest) left child in the binary tree
+const mychildrenLastLeft = async (conn, id) => {
+    const sql = `SELECT userid FROM members WHERE parentid = ? AND l_member = 1`;
+    const [rows] = await conn.execute(sql, [id]);
+    
+    if (rows.length > 0) {
+        const children = [];
+        for (const row of rows) {
+            children.push(row.userid);
+            // Recursively find children of this child
+            const childId = await mychildrenLastLeft(conn, row.userid);
+            if (childId !== row.userid) {
+                children.push(childId);
+            }
+        }
+        
+        if (children.length > 0) {
+            // Return the last (deepest) child
+            return children[children.length - 1];
+        } else {
+            return id;
+        }
+    } else {
+        return id;
+    }
+};
+
+// Find the last (deepest) right child in the binary tree
+const mychildrenLastRight = async (conn, id) => {
+    const sql = `SELECT userid FROM members WHERE parentid = ? AND r_member = 1`;
+    const [rows] = await conn.execute(sql, [id]);
+    
+    if (rows.length > 0) {
+        const children = [];
+        for (const row of rows) {
+            children.push(row.userid);
+            // Recursively find children of this child
+            const childId = await mychildrenLastRight(conn, row.userid);
+            if (childId !== row.userid) {
+                children.push(childId);
+            }
+        }
+        
+        if (children.length > 0) {
+            // Return the last (deepest) child
+            return children[children.length - 1];
+        } else {
+            return id;
+        }
+    } else {
+        return id;
+    }
+};
+
 module.exports = {
     getDanBalance,
     accountTotalDeposit,
@@ -296,5 +351,7 @@ module.exports = {
     referralBonus,
     pvAdd,
     settleBinaryForUser,
-    getEarningsCapAdjustments
+    getEarningsCapAdjustments,
+    mychildrenLastLeft,
+    mychildrenLastRight
 };

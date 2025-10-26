@@ -1,6 +1,7 @@
 // controllers/signupController.js
 const { getConnection } = require('../config/database');
 const bcrypt = require('bcryptjs');
+const { mychildrenLastLeft, mychildrenLastRight } = require('./helpers');
 
 // Generate unique referral code
 const generateRefCode = () => {
@@ -15,23 +16,6 @@ const generateRefCode = () => {
 // Generate profile ID (D00001, D00002, etc.)
 const generateProfileId = (userid) => {
     return 'D' + userid.toString().padStart(5, '0');
-};
-
-// Find last child in binary tree (left or right)
-const findLastChild = async (conn, parentId, side) => {
-    if (side === 'left') {
-        const [rows] = await conn.execute(
-            `SELECT userid FROM members WHERE parentid = ? AND l_member = 1 ORDER BY userid DESC LIMIT 1`,
-            [parentId]
-        );
-        return rows.length > 0 ? rows[0].userid : parentId;
-    } else {
-        const [rows] = await conn.execute(
-            `SELECT userid FROM members WHERE parentid = ? AND r_member = 1 ORDER BY userid DESC LIMIT 1`,
-            [parentId]
-        );
-        return rows.length > 0 ? rows[0].userid : parentId;
-    }
 };
 
 // Create user sign-up
@@ -134,14 +118,29 @@ const signUp = async (req, res) => {
                 [profileId, userId]
             );
 
-            // 6) Set binary tree position
+            // 6) Set binary tree position (matching legacy PHP logic)
             let parentId = 0;
-            if (side) {
-                // Find appropriate parent in binary tree
-                parentId = await findLastChild(conn, sponsorId, side);
+            
+            // Check if manual parent selection is provided
+            // if (pid && pid !== 0) {
+            //     // Manual parent selection - validate parent exists
+            //     const [parentRows] = await conn.execute(
+            //         `SELECT userid FROM members WHERE ref_code = ?`,
+            //         [pid]
+            //     );
+            //     if (parentRows.length > 0) {
+            //         parentId = parentRows[0].userid;
+            //     }
+            // } else if (side) {
+            // Auto-positioning based on side (recursive like PHP)
+            if (side === 'left') {
+                parentId = await mychildrenLastLeft(conn, sponsorId);
+            } else if (side === 'right') {
+                parentId = await mychildrenLastRight(conn, sponsorId);
             }
+            // }
 
-            // Update parent and side
+            // Update parent ID
             await conn.execute(
                 `UPDATE members SET parentid = ? WHERE userid = ?`,
                 [parentId, userId]
