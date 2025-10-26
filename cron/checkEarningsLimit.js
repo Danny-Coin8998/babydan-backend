@@ -263,13 +263,16 @@ const runEarningsLimitCheck = async () => {
                 continue;
             }
             
+            // Print user details for each user checked
+            console.log(`👤 User ${userData.userid}:`);
+            console.log(`   - User Balance: ${userData.userBalance} DAN`);
+            console.log(`   - Earnings Limit: ${userData.earningsLimit} THB`);
+            console.log(`   - Total Investment: ${userData.totalInvestment} THB`);
+            console.log(`   - Status: ${userData.exceedsLimit ? 'EXCEEDS LIMIT' : 'Within limit'}`);
+            
             if (userData.exceedsLimit) {
                 results.usersExceedingLimit++;
-                console.log(`⚠️  User ${user.userid} exceeds limit:`);
-                console.log(`   - User Balance: ${userData.userBalance} DAN`);
-                console.log(`   - Total Investment: ${userData.totalInvestment} THB`);
-                console.log(`   - 3x Limit: ${userData.earningsLimit} THB`);
-                console.log(`   - Excess: ${userData.excessAmount} DAN`);
+                console.log(`⚠️  EXCESS AMOUNT: ${userData.excessAmount} DAN`);
                 
                 // Process the user
                 const processResult = await processUserExceedingLimit(userData);
@@ -283,6 +286,8 @@ const runEarningsLimitCheck = async () => {
                 }
                 
                 console.log('─'.repeat(40));
+            } else {
+                console.log('─'.repeat(30));
             }
         }
         
