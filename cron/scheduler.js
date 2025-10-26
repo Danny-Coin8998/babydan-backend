@@ -20,21 +20,21 @@ const { runEarningsLimitCheck } = require('./checkEarningsLimit');
 
 // Cron job configurations
 const CRON_JOBS = {
-    earningsLimitCheck: {
-        name: 'Earnings Limit Check',
-        interval: 24 * 60 * 60 * 1000, // 24 hours in milliseconds (midnight to midnight)
-        enabled: true,
-        function: runEarningsLimitCheck,
-        runAtMidnight: true // Special flag for midnight scheduling
-    },
+    // earningsLimitCheck: {
+    //     name: 'Earnings Limit Check',
+    //     interval: 24 * 60 * 60 * 1000, // 24 hours in milliseconds (midnight to midnight)
+    //     enabled: true,
+    //     function: runEarningsLimitCheck,
+    //     runAtMidnight: true // Special flag for midnight scheduling
+    // },
     // Test version - runs every 5 minutes (commented out for production)
     // To enable for testing: uncomment the block below and set enabled: true
-    // earningsLimitCheckTest: {
-    //     name: 'Earnings Limit Check (Test)',
-    //     interval: 1 * 60 * 1000, // 1 minute in milliseconds (for testing)
-    //     enabled: true,
-    //     function: runEarningsLimitCheck
-    // }
+    earningsLimitCheckTest: {
+        name: 'Earnings Limit Check (Test)',
+        interval: 5 * 60 * 1000, // 5 minutes in milliseconds (for testing)
+        enabled: true,
+        function: runEarningsLimitCheck
+    }
     // Add more cron jobs here as needed
     // exampleJob: {
     //     name: 'Example Job',
