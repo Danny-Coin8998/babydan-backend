@@ -17,6 +17,7 @@ const buyPackageRoutes = require('./routes/buyPackage');
 const profileRoutes = require('./routes/profile');
 const withdrawRoutes = require('./routes/withdraw');
 const transferRoutes = require('./routes/transfer');
+const adminRoutes = require('./routes/admin');
 
 // Import database connection
 const { testConnection } = require('./config/database');
@@ -74,17 +75,17 @@ app.get('/v2', (req, res) => {
         message: 'Baby Dan API Server is running!',
         version: '1.0.0',
         endpoints: {
-            auth: {
-                login: 'POST /v2/api/auth/login',
-                logout: 'POST /v2/api/auth/logout',
-                test: 'GET /v2/api/auth/test/:userid'
-            },
-            dashboard: 'GET /v2/api/dashboard/',
-            investment: 'GET /v2/api/my-investment/',
-            directReferral: 'GET /v2/api/my-direct-referral/direct',
-            team: 'GET /v2/api/my-team/team',
-            history: 'GET /v2/api/history/',
-            referralLink: 'GET /v2/api/ref-link/link'
+            // auth: {
+            //     login: 'POST /v2/api/auth/login',
+            //     logout: 'POST /v2/api/auth/logout',
+            //     test: 'GET /v2/api/auth/test/:userid'
+            // },
+            // dashboard: 'GET /v2/api/dashboard/',
+            // investment: 'GET /v2/api/my-investment/',
+            // directReferral: 'GET /v2/api/my-direct-referral/direct',
+            // team: 'GET /v2/api/my-team/team',
+            // history: 'GET /v2/api/history/',
+            // referralLink: 'GET /v2/api/ref-link/link'
         }
     });
 });
@@ -104,16 +105,17 @@ app.use('/v2/api/buy-package', buyPackageRoutes);
 app.use('/v2/api/profile', profileRoutes);
 app.use('/v2/api/withdraw', withdrawRoutes);
 app.use('/v2/api/transfer', transferRoutes);
+app.use('/v2/api/admin', adminRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).json({ success: false, error: 'Something went wrong!' });
+    res.status(500).json({ success: false, error: 'Something went wrong!'});
 });
 
 // 404 handler
 app.use('*', (req, res) => {
-    res.status(404).json({ success: false, error: 'API endpoint not found'+res });
+    res.status(404).json({ success: false, error: 'API endpoint not found'});
 });
 
 module.exports = app;
