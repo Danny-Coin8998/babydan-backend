@@ -12,7 +12,9 @@ const getDailyInvest = async (req, res) => {
                 SUM(p.p_amount) AS total_amount
             FROM member_invest mi
             LEFT JOIN packages p ON p.p_id = mi.p_id
-            WHERE DATE(DATE_ADD(mi.inv_date, INTERVAL 7 HOUR)) BETWEEN DATE_SUB(CURDATE(), INTERVAL 9 DAY) AND CURDATE()
+            WHERE DATE(DATE_ADD(mi.inv_date, INTERVAL 7 HOUR)) BETWEEN 
+                  DATE_SUB(DATE(DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 HOUR)), INTERVAL 9 DAY)
+                  AND DATE(DATE_ADD(UTC_TIMESTAMP(), INTERVAL 7 HOUR))
             GROUP BY day
             ORDER BY day DESC
         `;
