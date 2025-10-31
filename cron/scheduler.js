@@ -27,10 +27,10 @@ const CRON_JOBS = {
     //     function: runEarningsLimitCheck,
     //     runAtMidnight: true // Special flag for midnight scheduling
     // },
-    // Production version - runs every 5 minutes
+    // Production version - runs every 15 minutes
     earningsLimitCheck: {
         name: 'Earnings Limit Check',
-        interval: 5 * 60 * 1000, // 5 minutes in milliseconds
+        interval: 15 * 60 * 1000, // 15 minutes in milliseconds
         enabled: true,
         function: runEarningsLimitCheck
     }

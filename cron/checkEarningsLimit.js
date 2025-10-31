@@ -283,9 +283,8 @@ const runEarningsLimitCheck = async () => {
                 }
                 
                 console.log('─'.repeat(40));
-            } else {
-                console.log('─'.repeat(30));
             }
+            // Removed separator for users within limit to reduce log clutter
         }
         
         // Print summary
