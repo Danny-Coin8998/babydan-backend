@@ -9,7 +9,8 @@ const getDailyInvest = async (req, res) => {
         const sql = `
             SELECT 
                 DATE_FORMAT(DATE_ADD(mi.inv_date, INTERVAL 7 HOUR), '%Y-%m-%d') AS day,
-                SUM(p.p_amount) AS total_amount
+                SUM(p.p_amount) AS total_amount,
+                SUM(CASE WHEN mi.txn LIKE 'Admin Action%' THEN p.p_amount ELSE 0 END) AS admin_total_amount
             FROM member_invest mi
             LEFT JOIN packages p ON p.p_id = mi.p_id
             WHERE DATE(DATE_ADD(mi.inv_date, INTERVAL 7 HOUR)) BETWEEN 
@@ -41,13 +42,16 @@ const getDailyInvest = async (req, res) => {
         }
 
         const dayToTotal = new Map();
+        const dayToAdminTotal = new Map();
         for (const r of rows) {
             dayToTotal.set(r.day, Number(r.total_amount || 0));
+            dayToAdminTotal.set(r.day, Number(r.admin_total_amount || 0));
         }
 
         const result = days.map((day) => ({
             day,
-            total_amount: dayToTotal.get(day) || 0
+            total_amount: dayToTotal.get(day) || 0,
+            admin_total_amount: dayToAdminTotal.get(day) || 0
         }));
 
         res.json({ success: true, data: result });
@@ -88,7 +92,7 @@ module.exports = {
             // Build a minimal request object compatible with buyPackage
             const buyReq = {
                 user: { userid },
-                body: { p_id },
+                body: { p_id, isAdminAction: true },
             };
 
             // Proxy the response so we can relay the result

@@ -5,7 +5,7 @@ const buyPackage = async (req, res) => {
     try {
         // Note: Balance check and deduction handled on frontend
         const { userid } = req.user;
-        const { p_id } = req.body || {};
+        const { p_id, isAdminAction } = req.body || {};
 
         if (!p_id) {
             return res.status(400).json({ success: false, error: 'p_id is required' });
@@ -64,11 +64,15 @@ const buyPackage = async (req, res) => {
             // );
 
             // 4.2) Create member_invest row
+            const txnDetail = isAdminAction 
+                ? `Admin Action - By BABY DAN (${usdtAmount} USDT)`
+                : `By BABY DAN (${usdtAmount} USDT)`;
+            
             const [invRes] = await conn.execute(
                 `INSERT INTO member_invest (
                     userid, p_id, inv_date, inv_amount, roi_next_datetime, txn, status
                  ) VALUES (?, ?, ?, ?, ?, ?, 'ACTIVE')`,
-                [userid, pkg.p_id, nowSql, requiredDan, nextDate, `By BABY DAN (${usdtAmount} USDT)`]
+                [userid, pkg.p_id, nowSql, requiredDan, nextDate, txnDetail]
             );
 
             // 4.3) Referral bonus (10%) and PV propagation
