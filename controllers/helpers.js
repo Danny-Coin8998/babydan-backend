@@ -168,6 +168,16 @@ const getDanPriceUsd = async () => {
 };
 
 // New helpers for referral, PV, and binary processing
+
+// Reusable helper to check if a user has any investment (ACTIVE or COMPLETED)
+const hasAnyInvestment = async (conn, userid) => {
+    const [rows] = await conn.execute(
+        `SELECT COUNT(*) AS cnt FROM member_invest WHERE userid = ? AND (status = 'ACTIVE' OR status = 'COMPLETED')`,
+        [userid]
+    );
+    return Number(rows?.[0]?.cnt || 0) > 0;
+};
+
 const getSponsorId = async (conn, userid) => {
     const [rows] = await conn.execute(`SELECT sponsorid FROM members WHERE userid = ?`, [userid]);
     return rows[0]?.sponsorid || 0;
@@ -175,6 +185,9 @@ const getSponsorId = async (conn, userid) => {
 
 const referralBonus = async (conn, sponsorId, fromUsername, level, invAmount) => {
     const pc = 0.10; // 10%
+    // Check sponsor qualification: must have at least 1 investment (ACTIVE or COMPLETED)
+    const sponsorHasInvestment = sponsorId > 0 ? await hasAnyInvestment(conn, sponsorId) : false;
+
     const bonusAmount = invAmount * pc;
     if (bonusAmount <= 0 || sponsorId <= 0) return;
     const nowSql = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -185,7 +198,7 @@ const referralBonus = async (conn, sponsorId, fromUsername, level, invAmount) =>
         ) VALUES (?, 'Referral bonus', ?, 0.00, 0.00, 0.00, ?, ?, 'System', 'APPROVED', ?, ?)`,
         [
             sponsorId,
-            invAmount * pc,
+            sponsorHasInvestment ? invAmount * pc : 0,
             `Referral bonus level ${level} from ${fromUsername}`,
             nowSql,
             nowSql,
@@ -243,11 +256,19 @@ const settleBinaryForUser = async (conn, userid) => {
     const bonusAmount = biCom * 0.08; // 8%
     const nowSql = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+    // Check sponsor qualification: must have at least 1 investment (ACTIVE or COMPLETED)
+    const sponsorHasInvestment = sponsorId > 0 ? await hasAnyInvestment(conn, sponsorId) : false;
+
+    // If sponsor doesn't have investment, set bonus amount to 0
+    if (!sponsorHasInvestment) {
+        bonusAmount = 0;
+    }
+
     // Credit binary bonus
     await conn.execute(
         `INSERT INTO wallet_cash_transactions (
             userid, created_datetime, tran_type, detail, in_amount, admin_status
-        ) VALUES (?, ?, 'Binary', 'Binary bonus received', ?, 'APPROVED')`,
+        ) VALUES (?, ?, 'Binary', 'Binary bonus received From Backend', ?, 'APPROVED')`,
         [userid, nowSql, bonusAmount]
     );
 
@@ -349,6 +370,7 @@ module.exports = {
     getDanPriceUsd,
     getSponsorId,
     referralBonus,
+    hasAnyInvestment,
     pvAdd,
     settleBinaryForUser,
     getEarningsCapAdjustments,
