@@ -244,7 +244,7 @@ const pvAdd = async (conn, userid, pv, next, useridStart) => {
     }
 };
 
-const settleBinaryForUser = async (conn, userid) => {
+const settleBinaryForUser = async (conn, userid, sponsorId = null) => {
     const [rows] = await conn.execute(`SELECT userid, l_pv, r_pv FROM members WHERE userid = ?`, [userid]);
     if (!rows || rows.length === 0) return;
     const member = rows[0];
@@ -253,11 +253,18 @@ const settleBinaryForUser = async (conn, userid) => {
     const biCom = Math.min(lPv, rPv);
     if (biCom <= 0) return;
 
-    const bonusAmount = biCom * 0.08; // 8%
+    // Get sponsorId if not provided (for backward compatibility)
+    let actualSponsorId = sponsorId;
+    if (actualSponsorId === null || actualSponsorId === undefined) {
+        actualSponsorId = await getSponsorId(conn, userid);
+    }
+    actualSponsorId = Number(actualSponsorId) || 0;
+
+    let bonusAmount = biCom * 0.08; // 8%
     const nowSql = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     // Check sponsor qualification: must have at least 1 investment (ACTIVE or COMPLETED)
-    const sponsorHasInvestment = sponsorId > 0 ? await hasAnyInvestment(conn, sponsorId) : false;
+    const sponsorHasInvestment = actualSponsorId > 0 ? await hasAnyInvestment(conn, actualSponsorId) : false;
 
     // If sponsor doesn't have investment, set bonus amount to 0
     if (!sponsorHasInvestment) {

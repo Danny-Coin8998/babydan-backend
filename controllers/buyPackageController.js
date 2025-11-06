@@ -84,8 +84,8 @@ const buyPackage = async (req, res) => {
             }
             await pvAdd(conn, userid, requiredDan, 0, userid);
 
-            // 4.4) Immediate binary settlement for this user
-            await settleBinaryForUser(conn, userid);
+            // 4.4) Immediate binary settlement for this user (pass sponsorId to avoid duplicate query)
+            await settleBinaryForUser(conn, userid, sponsorId);
 
             await conn.commit();
 
